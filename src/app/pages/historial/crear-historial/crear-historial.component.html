@@ -1,0 +1,168 @@
+<div class="bg-gray-600 rounded-md shadow-md p-4 mb-4">
+  <h2 class="text-xl font-bold">Crear historial</h2>
+</div>
+
+<form class="space-y-4 mb-4" [formGroup]="dataForm()" (ngSubmit)="onSubmit()">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="paciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Nombre del paciente</label
+      >
+      <select
+        name="idpaciente"
+        formControlName="idpaciente"
+        class="shadow bg-gray-600 border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+      >
+        <option value="" disabled selected>Seleccione un paciente</option>
+        <option value="{{ item.idpaciente }}" *ngFor="let item of pacientes()">
+          {{ item.nompaciente }}
+        </option>
+      </select>
+      <div
+        *ngIf="dataForm().controls.idpaciente.touched && dataForm().controls.idpaciente.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        El paciente es requerido
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="peso"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Peso</label
+      >
+      <input
+        type="text"
+        id="peso"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese su peso"
+        name="pesohistorial"
+        formControlName="pesohistorial"
+      />
+      <div
+        *ngIf="dataForm().controls.pesohistorial.touched && dataForm().controls.pesohistorial.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        El peso es requerido
+      </div>
+    </div>
+    <div>
+      <label
+        for="talla"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Talla</label
+      >
+      <input
+        type="text"
+        id="talla"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese su talla"
+        name="tallahistorial"
+        formControlName="tallahistorial"
+      />
+      <div
+        *ngIf="dataForm().controls.tallahistorial.touched && dataForm().controls.tallahistorial.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        La talla es requerida
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="frecuencia"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Frecuencia cardiaca</label
+      >
+      <input
+        type="text"
+        id="frecuencia"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese su frecuencia cardiaca"
+        name="fchistorial"
+        formControlName="fchistorial"
+      />
+      <div
+        *ngIf="dataForm().controls.fchistorial.touched && dataForm().controls.fchistorial.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        La frecuencia cardiaca es requerida
+      </div>
+    </div>
+    <div>
+      <label
+        for="cita"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Cita</label
+      >
+      <input
+        id="cita"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese la próxima cita"
+        name="citahistorial"
+        formControlName="citahistorial"
+      />
+      <div
+      *ngIf="dataForm().controls.citahistorial.touched && dataForm().controls.citahistorial.errors?.['required']"
+      class="text-red-500 text-sm mt-2">La dirección es requerida</div>
+    </div>
+  </div>
+  <div class="grid w-full">
+    <div>
+      <label
+        for="diagnostico"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Diagnóstico</label
+      >
+      <textarea
+        id="diagnostico"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese el diagnostico"
+        name="diagnostico"
+        formControlName="diagnostico"
+      ></textarea>
+      <div
+      *ngIf="dataForm().controls.diagnostico.touched && dataForm().controls.diagnostico.errors?.['required']"
+      class="text-red-500 text-sm mt-2">El diagnóstico es requerido</div>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="bg-purple-600 hover:bg-purple-700 transition-all duration-200 rounded-md px-4 py-2 text-white font-semibold"
+  >
+    Crear historial
+  </button>
+</form>
+
+<div
+  *ngIf="showConfirmationModal()"
+  class="fixed inset-0 flex items-center justify-center p-4"
+>
+  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-bold mb-4">
+      Estás seguro de crear este historial?
+    </h2>
+    <div class="flex justify-end space-x-4">
+      <button
+        class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+        (click)="cancelCreateHistorial()"
+      >
+        Cancelar
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+        (click)="confirmCreateHistorial()"
+      >
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>

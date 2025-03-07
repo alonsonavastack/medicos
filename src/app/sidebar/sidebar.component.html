@@ -1,0 +1,47 @@
+
+<nav class="bg-gray-800 text-[var(--text-color-blue-blanco)] p-4 min-h-screen flex flex-col sm:flex-row transition-all duration-300 ease-in-out">
+  <button (click)="collapsed.set(!collapsed())" class="text-[var(--text-color-blue-blanco)] ml-2 md:text-sm md:text-gray-500 hover:bg-gray-700 rounded-md p-2">
+    <i class="fa fa-bars"></i>
+  </button>
+  <nav *ngIf="!collapsed()" [@expandContractMenu] class="sm:w-1/4 sm:border-r sm:border-gray-700 transition-all duration-300 ease-in-out">
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/crear-pacientes" [ngClass]="{ 'bg-gray-600': isActive('/crear-pacientes') }">
+      <i class="fa fa-tachometer-alt fa-fw mr-2"></i>
+      Crear paciente
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/lista-pacientes" [ngClass]="{ 'bg-gray-600': isActive('/lista-pacientes') }">
+      <i class="fa fa-users fa-fw mr-2"></i>
+      Lista pacientes
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/crear-historial" [ngClass]="{ 'bg-gray-600': isActive('/crear-historial') }">
+      <i class="fa fa-toggle-on fa-fw mr-2"></i>
+      Crear historial
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/lista-historial" [ngClass]="{ 'bg-gray-600': isActive('/lista-historial') }">
+      <i class="fa fa-file-alt fa-fw mr-2"></i>
+      Lista historial
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/cards" [ngClass]="{ 'bg-gray-600': isActive('/cards') }">
+      <i class="fa fa-id-card fa-fw mr-2"></i>
+      Cards
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/tablas" [ngClass]="{ 'bg-gray-600': isActive('/tablas') }">
+      <i class="fa fa-table fa-fw mr-2"></i>
+      Tablas
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/alertas" [ngClass]="{ 'bg-gray-600': isActive('/alertas') }">
+      <i class="fa fa-exclamation-triangle fa-fw mr-2"></i>
+      Alertas
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/iconos" [ngClass]="{ 'bg-gray-600': isActive('/iconos') }">
+      <i class="fa fa-icons fa-fw mr-2"></i>
+      Iconos
+    </a>
+    <a class="flex items-center py-2 px-4 rounded-md hover:bg-gray-700 transition-all duration-150 ease-in-out" routerLink="/login" [ngClass]="{ 'bg-gray-600': isActive('/login') }">
+      <i class="fa fa-sign-in-alt fa-fw mr-2"></i>
+      Login
+    </a>
+  </nav>
+  <div class="sm:w-full p-4">
+    <router-outlet ></router-outlet>
+  </div>
+</nav>

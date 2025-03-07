@@ -1,0 +1,58 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PacienteService } from '../../../services/paciente.service';
+import { HotToastService } from '@ngxpert/hot-toast';
+
+@Component({
+  selector: 'app-crear-paciente',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './crear-paciente.component.html',
+  styleUrl: './crear-paciente.component.css'
+})
+export class CrearPacienteComponent {
+
+  pacienteService = inject(PacienteService);
+  toast = inject(HotToastService);
+  showConfirmationModal = signal(false);
+
+ dataForm = signal(
+    new FormGroup({
+      nompaciente: new FormControl('', [Validators.required]),
+      edadpaciente: new FormControl('', [Validators.required]),
+      telpaciente: new FormControl('', [Validators.required]),
+      dirpaciente: new FormControl('', [Validators.required]),
+    })
+ )
+
+ onSubmit() {
+  if (this.dataForm().invalid) {
+    this.dataForm().markAllAsTouched();
+    return;
+  }
+  this.showConfirmationModal.set(true);
+
+ }
+
+ confirmCreatePaciente() {
+  this.showConfirmationModal.set(false);
+  if (this.dataForm().valid == true) {
+    this.pacienteService.altaPaciente(this.dataForm().value)
+      .subscribe({
+        next: ( response ) => {
+
+          this.toast.success('Paciente creado con éxito');
+        },
+        error: ( error ) => {
+
+          this.toast.error('No se pudo registrar, algo malo ocurrió', { dismissible: true });
+        }
+      });
+  }
+ }
+
+ cancelCreatePaciente() {
+  this.showConfirmationModal.set(false);
+ }
+
+}

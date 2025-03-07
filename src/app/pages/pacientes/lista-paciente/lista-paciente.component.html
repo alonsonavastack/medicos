@@ -1,0 +1,162 @@
+@if (isLoading()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+  </div>
+} @else if (sortedPacientes().length > 0){
+<div class="bg-gray-600 rounded-md shadow-md p-4 mb-4">
+  <h2 class="text-xl font-bold">Listado de pacientes</h2>
+</div>
+
+<div class="rounded-md shadow-md overflow-x-auto">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('nompaciente')">
+          Nombre
+          <i class="fa ml-1" [ngClass]="{
+            'fa-sort-asc': sortBy() === 'nompaciente' && sortOrder() === 'asc',
+            'fa-sort-desc': sortBy() === 'nompaciente' && sortOrder() === 'desc',
+            'fa-sort': sortBy() !== 'nompaciente'
+          }"></i>
+        </th>
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('edadpaciente')">
+          Edad
+          <i class="fa ml-1" [ngClass]="{
+            'fa-sort-asc': sortBy() === 'edadpaciente' && sortOrder() === 'asc',
+            'fa-sort-desc': sortBy() === 'edadpaciente' && sortOrder() === 'desc',
+            'fa-sort': sortBy() !== 'edadpaciente'
+          }"></i>
+        </th>
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('telpaciente')">
+          Teléfono
+          <i class="fa ml-1" [ngClass]="{
+            'fa-sort-asc': sortBy() === 'telpaciente' && sortOrder() === 'asc',
+            'fa-sort-desc': sortBy() === 'telpaciente' && sortOrder() === 'desc',
+            'fa-sort': sortBy() !== 'telpaciente'
+          }"></i>
+        </th>
+        <th scope="col" class="px-6 py-3">Acción</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of sortedPacientes(); let j = index" [ngClass]="{'bg-gray-100': j % 2 !== 0, 'bg-white': j % 2 === 0 }">
+        <td class="px-6 py-4">{{ item.nompaciente }}</td>
+        <td class="px-6 py-4">{{ item.edadpaciente }}</td>
+        <td class="px-6 py-4">{{ item.telpaciente }}</td>
+        <td class="px-6 py-4 flex items-center gap-2">
+          <button class="text-blue-500 hover:text-blue-700" (click)="onVerPaciente(item)"><i class="fa fa-eye"></i></button>
+          <button class="text-yellow-500 hover:text-yellow-700" (click)="onEditPaciente(item)"><i class="fa fa-pencil"></i></button>
+          <button class="text-red-500 hover:text-red-700" (click)="showDeleteModal(item.idpaciente)"><i class="fa fa-trash"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!--Modal-->
+ <div *ngIf="showModal()" class="fixed inset-0 flex items-center justify-center p-4">
+  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-bold mb-4">Editar paciente</h2>
+    <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)" >
+      <div class="mb-4">
+        <label for="nompaciente" class="block text-gray-700 text-sm font-blod mb-2">Nombre</label>
+        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="nompaciente" name="nompaciente" [(ngModel)]="selectedPaciente().nompaciente" #nompaciente="ngModel" required>
+        <div *ngIf="nompaciente.touched && nompaciente.invalid" class="text-red-500 text-sm mt-2">El nombre es requerido</div>
+      </div>
+      <div class="mb-4">
+        <label for="edadpaciente" class="block text-gray-700 text-sm font-blod mb-2">Edad</label>
+        <input type="number" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="edadpaciente" name="edadpaciente" [(ngModel)]="selectedPaciente().edadpaciente" #edadpaciente="ngModel" required>
+        <div *ngIf="edadpaciente.touched && edadpaciente.invalid"  class="text-red-500 text-sm mt-2">La edad es requerida</div>
+      </div>
+      <div class="mb-4">
+        <label for="telpaciente" class="block text-gray-700 text-sm font-blod mb-2">Teléfono</label>
+        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="telpaciente" name="telpaciente" [(ngModel)]="selectedPaciente().telpaciente" #telpaciente="ngModel" required>
+        <div *ngIf="telpaciente.touched && telpaciente.invalid"  class="text-red-500 text-sm mt-2">El teléfono es requerido</div>
+      </div>
+      <div class="mb-4">
+        <label for="dirpaciente" class="block text-gray-700 text-sm font-blod mb-2">Dirección</label>
+        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="dirpaciente" name="dirpaciente" [(ngModel)]="selectedPaciente().dirpaciente" #dirpaciente="ngModel" required>
+        <div *ngIf="dirpaciente.touched && dirpaciente.invalid"  class="text-red-500 text-sm mt-2">La dirección es requerida</div>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" (click)="onCloseModal()">Cancelar</button>
+        <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded-md" >Guardar</button>
+
+      </div>
+    </form>
+
+    <div *ngIf="showConfirmationModal()" class="fixed inset-0 flex items-center justify-center p-4">
+      <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-xl font-bold mb-4">Estás seguro de editar este paciente?</h2>
+        <div class=" flex justify-end space-x-4">
+          <button class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+           (click)="cancelEditPaciente()"
+          >
+            Cancelar
+          </button>
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+           (click)="confirmEditPaciente()"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+     </div>
+  </div>
+ </div>
+
+ <!--Modal-->
+ <div *ngIf="showVerModal()" class="fixed inset-0 flex items-center justify-center p-4">
+  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-bold mb-4">Editar paciente</h2>
+    <form action="" >
+      <div class="mb-4">
+        <label for="nompaciente" class="block text-white text-sm font-blod mb-2">Nombre</label>
+        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().nompaciente }}</p>
+      </div>
+      <div class="mb-4">
+        <label for="edadpaciente" class="block text-white-700 text-sm font-blod mb-2">Edad</label>
+        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().edadpaciente }}</p>
+      </div>
+      <div class="mb-4">
+        <label for="telpaciente" class="block text-white-700 text-sm font-blod mb-2">Teléfono</label>
+        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().telpaciente }}</p>
+      </div>
+      <div class="mb-4">
+        <label for="dirpaciente" class="block text-white-700 text-sm font-blod mb-2">Dirección</label>
+        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().dirpaciente }}</p>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md mr-2" (click)="onCloseVerModal()">Cancelar</button>
+
+      </div>
+    </form>
+  </div>
+ </div>
+
+
+ <div *ngIf="showDelete()" class="fixed inset-0 flex items-center justify-center p-4">
+  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-xl font-bold mb-4">Estás seguro de eliminar este paciente?</h2>
+    <div class=" flex justify-end space-x-4">
+      <button class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+       (click)="cancelDeletePaciente()"
+      >
+        Cancelar
+      </button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+       (click)="confirmDeletePaciente()"
+      >
+        Aceptar
+      </button>
+    </div>
+  </div>
+ </div>
+
+
+} @else {
+  <div class="bg-gray-600 rounded-md shadow-md p-4 mb-4">
+    <h2 class="text-xl font-bold">No existen datos</h2>
+  </div>
+}
