@@ -31,8 +31,9 @@ date = new Date();
     return this.http.post(this.altaPacienteUrl, dataForm);
   }
 
-  altaHistorial(dataForm: any) {
-    console.log(dataForm)
+  altaHistorial(dataForm: FormData) { // Changed parameter type
+    // The console.log might not display FormData contents well, this is normal.
+    console.log('Sending FormData to altaHistorial:', dataForm);
     return this.http.post(this.altaHistorialUrl, dataForm);
   }
 

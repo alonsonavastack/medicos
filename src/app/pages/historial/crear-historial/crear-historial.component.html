@@ -210,6 +210,21 @@
     </div>
   </div>
 
+  <div>
+    <label
+      for="recipeImage"
+      class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+      >Recipe Image</label
+    >
+    <input
+      type="file"
+      id="recipeImage"
+      class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+    />
+  </div>
+
   <button
     type="submit"
     class="bg-purple-600 hover:bg-purple-700 transition-all duration-200 rounded-md px-4 py-2 text-white font-semibold"

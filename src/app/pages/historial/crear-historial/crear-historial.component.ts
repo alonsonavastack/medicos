@@ -43,8 +43,17 @@ export class CrearHistorialComponent {
       idpaciente: new FormControl(null, [Validators.required]),
       fechahistorial: new FormControl(this.date.toLocaleDateString()),
       diagnostico: new FormControl('', [Validators.required]),
+      recipeImage: new FormControl<File | null>(null)
     })
   );
+
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.dataForm().patchValue({ recipeImage: file });
+      this.dataForm().get('recipeImage')?.updateValueAndValidity();
+    }
+  }
 
   onSubmit() {
     if (this.dataForm().invalid) {
@@ -57,7 +66,19 @@ export class CrearHistorialComponent {
   confirmCreateHistorial() {
     this.showConfirmationModal.set(false);
     if (this.dataForm().valid == true) {
-      this.pacienteService.altaHistorial(this.dataForm().value).subscribe({
+      const formData = new FormData();
+      Object.keys(this.dataForm().controls).forEach(key => {
+        const control = this.dataForm().get(key);
+        if (control && control.value !== null && control.value !== undefined) {
+          if (key === 'recipeImage' && control.value instanceof File) {
+            formData.append(key, control.value, control.value.name);
+          } else {
+            formData.append(key, control.value);
+          }
+        }
+      });
+
+      this.pacienteService.altaHistorial(formData).subscribe({
         next: (resp) => {
           this.toast.success('Historial creado correctamente');
           this.pacienteService.updateHistorial();
