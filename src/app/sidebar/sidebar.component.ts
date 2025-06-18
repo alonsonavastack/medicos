@@ -31,4 +31,9 @@ export class SidebarComponent {
     return this.router.url === route; //or includes or startsWith depending on the logic.
   }
 
+  logout() {
+    localStorage.removeItem('email');
+    this.router.navigateByUrl('login');
+  }
+
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { PacienteService } from '../../../services/paciente.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
@@ -10,6 +10,18 @@ interface Item {
   edadpaciente: string;
   telpaciente: string;
   dirpaciente: string;
+  correopaciente: string;
+  ahfpaciente: string;
+  apnppaciente: string;
+  apppaciente: string;
+  agopaciente: string;
+  cardiacopaciente: string,
+  respiratoriopaciente: string,
+  digestivopaciente: string,
+  pielytegumentospaciente: string,
+  hemotipopaciente: string,
+  terapeuticapaciente: string,
+  pronosticopaciente: string;
 }
 
 @Component({
@@ -22,8 +34,8 @@ export class ListaPacienteComponent {
   pacientesService = inject(PacienteService);
   toast = inject(HotToastService);
 
-  pacientes = this.pacientesService.pacientes;
-
+  private _allPacientes = this.pacientesService.pacientes;
+  pacientes = signal<Item[]>([]);
   sortBy = signal<keyof Item>('nompaciente');
   sortOrder = signal<'asc' | 'desc'>('asc');
 
@@ -39,38 +51,58 @@ export class ListaPacienteComponent {
     edadpaciente: '',
     telpaciente: '',
     dirpaciente: '',
+    correopaciente: '',
+    ahfpaciente: '',
+    apnppaciente: '',
+    apppaciente: '',
+    agopaciente: '',
+    cardiacopaciente: '',
+    respiratoriopaciente: '',
+    digestivopaciente: '',
+    pielytegumentospaciente: '',
+    hemotipopaciente: '',
+    terapeuticapaciente: '',
+    pronosticopaciente: '',
+
   });
 
   isLoading = this.pacientesService.isLoading
+  searchText: string = '';
 
-  sortedPacientes = computed(() => {
-    const currentSortBy = this.sortBy();
-    const currentSortOrder = this.sortOrder();
-
-    return [...this.pacientes()].sort((a, b) => {
-      const valueA = a[currentSortBy];
-      const valueB = b[currentSortBy];
-
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return currentSortOrder === 'asc'
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      } else if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return currentSortOrder === 'asc' ? valueA - valueB : valueB - valueA;
-      } else {
-        return 0;
-      }
-    });
-  });
-
-  setSortBy(column: keyof Item) {
-    if (this.sortBy() === column) {
-      this.sortOrder.update((order) => (order === 'asc' ? 'desc' : 'asc'));
-    } else {
-      this.sortBy.set(column);
-      this.sortOrder.set('asc');
+  constructor() {
+      effect(() => {
+        this.pacientes.set(this._allPacientes());
+      });
     }
-  }
+
+  // sortedPacientes = computed(() => {
+  //   const currentSortBy = this.sortBy();
+  //   const currentSortOrder = this.sortOrder();
+
+  //   return [...this.pacientes()].sort((a, b) => {
+  //     const valueA = a[currentSortBy];
+  //     const valueB = b[currentSortBy];
+
+  //     if (typeof valueA === 'string' && typeof valueB === 'string') {
+  //       return currentSortOrder === 'asc'
+  //         ? valueA.localeCompare(valueB)
+  //         : valueB.localeCompare(valueA);
+  //     } else if (typeof valueA === 'number' && typeof valueB === 'number') {
+  //       return currentSortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  // });
+
+  // setSortBy(column: keyof Item) {
+  //   if (this.sortBy() === column) {
+  //     this.sortOrder.update((order) => (order === 'asc' ? 'desc' : 'asc'));
+  //   } else {
+  //     this.sortBy.set(column);
+  //     this.sortOrder.set('asc');
+  //   }
+  // }
 
   onEditPaciente(item: Item) {
     this.showModal.set(true);
@@ -103,6 +135,7 @@ export class ListaPacienteComponent {
 
   confirmEditPaciente() {
     this.showConfirmationModal.set(false);
+    console.log(this.selectedPaciente());
     this.pacientesService.editarPaciente(this.selectedPaciente()).subscribe({
       next: (response: any) => {
         if (response['resultado'] == 'OK') {
@@ -161,5 +194,33 @@ export class ListaPacienteComponent {
 
   cancelDeletePaciente() {
     this.showDelete.set(false);
+  }
+
+  filteredPacientesList() {
+    if (!this.searchText) {
+      return this.pacientes();
+    }
+    const search = this.searchText
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+      return this.pacientes().filter((item) => {
+
+        const nompaciente = item.nompaciente
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+          return nompaciente.includes(search);
+      });
+  }
+
+  resetPacientes(){
+    this.searchText = '';
+  }
+
+  seleccionarDiagnostico(idpaciente: any) {
+    this.pacientesService.seleccionarDiagnostico(idpaciente)
   }
 }

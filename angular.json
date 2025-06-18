@@ -21,12 +21,15 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
             "styles": [
+              "@ngxpert/hot-toast/styles.css",
+              "@ngxpert/hot-toast/styles.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -85,6 +88,8 @@
               }
             ],
             "styles": [
+              "@ngxpert/hot-toast/styles.css",
+              "@ngxpert/hot-toast/styles.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -92,5 +97,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

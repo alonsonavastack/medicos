@@ -2,50 +2,40 @@
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
     <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
   </div>
-} @else if (sortedPacientes().length > 0){
+} @else if (filteredPacientesList().length > 0){
 <div class="bg-gray-600 rounded-md shadow-md p-4 mb-4">
-  <h2 class="text-xl font-bold">Listado de pacientes</h2>
+  <h2 class="text-xl font-bold">Historia clínica</h2>
 </div>
-
+<input type="text" class="bg-blue-50 border border-blue-300 text-blue-900 sm:text-sm rounded-lg focus:ring-blue-500
+focus:border-blue-500 block w-full p-2.5 mb-2"
+ placeholder="Buscar..." [(ngModel)]="searchText">
 <div class="rounded-md shadow-md overflow-x-auto">
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('nompaciente')">
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" >
           Nombre
-          <i class="fa ml-1" [ngClass]="{
-            'fa-sort-asc': sortBy() === 'nompaciente' && sortOrder() === 'asc',
-            'fa-sort-desc': sortBy() === 'nompaciente' && sortOrder() === 'desc',
-            'fa-sort': sortBy() !== 'nompaciente'
-          }"></i>
+
         </th>
-        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('edadpaciente')">
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" >
           Edad
-          <i class="fa ml-1" [ngClass]="{
-            'fa-sort-asc': sortBy() === 'edadpaciente' && sortOrder() === 'asc',
-            'fa-sort-desc': sortBy() === 'edadpaciente' && sortOrder() === 'desc',
-            'fa-sort': sortBy() !== 'edadpaciente'
-          }"></i>
+
         </th>
-        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" (click)="setSortBy('telpaciente')">
+        <th scope="col" class="px-6 py-3 cursor-pointer  items-center" >
           Teléfono
-          <i class="fa ml-1" [ngClass]="{
-            'fa-sort-asc': sortBy() === 'telpaciente' && sortOrder() === 'asc',
-            'fa-sort-desc': sortBy() === 'telpaciente' && sortOrder() === 'desc',
-            'fa-sort': sortBy() !== 'telpaciente'
-          }"></i>
+
         </th>
         <th scope="col" class="px-6 py-3">Acción</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let item of sortedPacientes(); let j = index" [ngClass]="{'bg-gray-100': j % 2 !== 0, 'bg-white': j % 2 === 0 }">
+      <tr *ngFor="let item of filteredPacientesList(); let j = index" [ngClass]="{'bg-gray-100': j % 2 !== 0, 'bg-white': j % 2 === 0 }">
         <td class="px-6 py-4">{{ item.nompaciente }}</td>
         <td class="px-6 py-4">{{ item.edadpaciente }}</td>
         <td class="px-6 py-4">{{ item.telpaciente }}</td>
         <td class="px-6 py-4 flex items-center gap-2">
-          <button class="text-blue-500 hover:text-blue-700" (click)="onVerPaciente(item)"><i class="fa fa-eye"></i></button>
+          <button class="text-blue-500 hover:text-blue-700" (click)="seleccionarDiagnostico(item.idpaciente)"><i class="fa fa-print"></i></button>
           <button class="text-yellow-500 hover:text-yellow-700" (click)="onEditPaciente(item)"><i class="fa fa-pencil"></i></button>
           <button class="text-red-500 hover:text-red-700" (click)="showDeleteModal(item.idpaciente)"><i class="fa fa-trash"></i></button>
         </td>
@@ -55,35 +45,84 @@
 </div>
 
 <!--Modal-->
- <div *ngIf="showModal()" class="fixed inset-0 flex items-center justify-center p-4">
-  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+ <div *ngIf="showModal()" class="fixed inset-0 flex items-center justify-center overflow-auto p-4">
+  <div class="bg-gray-900 rounded-lg shadow-lg w-full max-w-2xl p-6">
     <h2 class="text-xl font-bold mb-4">Editar paciente</h2>
     <form #editForm="ngForm" (ngSubmit)="onSubmit(editForm)" >
+      <div class="max-h-[60vh] overflow-y-auto pr-2">
       <div class="mb-4">
-        <label for="nompaciente" class="block text-gray-700 text-sm font-blod mb-2">Nombre</label>
+        <label for="nompaciente" class="block text-gray-500 text-sm font-blod mb-2">Nombre</label>
         <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="nompaciente" name="nompaciente" [(ngModel)]="selectedPaciente().nompaciente" #nompaciente="ngModel" required>
         <div *ngIf="nompaciente.touched && nompaciente.invalid" class="text-red-500 text-sm mt-2">El nombre es requerido</div>
       </div>
       <div class="mb-4">
-        <label for="edadpaciente" class="block text-gray-700 text-sm font-blod mb-2">Edad</label>
+        <label for="edadpaciente" class="block text-gray-500 text-sm font-blod mb-2">Edad</label>
         <input type="number" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="edadpaciente" name="edadpaciente" [(ngModel)]="selectedPaciente().edadpaciente" #edadpaciente="ngModel" required>
         <div *ngIf="edadpaciente.touched && edadpaciente.invalid"  class="text-red-500 text-sm mt-2">La edad es requerida</div>
       </div>
       <div class="mb-4">
-        <label for="telpaciente" class="block text-gray-700 text-sm font-blod mb-2">Teléfono</label>
-        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="telpaciente" name="telpaciente" [(ngModel)]="selectedPaciente().telpaciente" #telpaciente="ngModel" required>
-        <div *ngIf="telpaciente.touched && telpaciente.invalid"  class="text-red-500 text-sm mt-2">El teléfono es requerido</div>
+        <label for="telpaciente" class="block text-gray-500 text-sm font-blod mb-2">Teléfono</label>
+        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="telpaciente" name="telpaciente" [(ngModel)]="selectedPaciente().telpaciente" #telpaciente="ngModel">
       </div>
       <div class="mb-4">
-        <label for="dirpaciente" class="block text-gray-700 text-sm font-blod mb-2">Dirección</label>
+        <label for="dirpaciente" class="block text-gray-500 text-sm font-blod mb-2">Dirección</label>
         <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="dirpaciente" name="dirpaciente" [(ngModel)]="selectedPaciente().dirpaciente" #dirpaciente="ngModel" required>
         <div *ngIf="dirpaciente.touched && dirpaciente.invalid"  class="text-red-500 text-sm mt-2">La dirección es requerida</div>
       </div>
+      <div class="mb-4">
+        <label for="correopaciente" class="block text-gray-500 text-sm font-blod mb-2">Correo electrónico</label>
+        <input type="text" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="correopaciente" name="correopaciente" [(ngModel)]="selectedPaciente().correopaciente" #correopaciente="ngModel">
+      </div>
+      <div class="mb-4">
+        <label for="ahfpaciente" class="block text-gray-500 text-sm font-blod mb-2">Antecedentes heredofamiliares</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="ahfpaciente" name="ahfpaciente" [(ngModel)]="selectedPaciente().ahfpaciente" #ahfpaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="apnppaciente" class="block text-gray-500 text-sm font-blod mb-2">Antecedentes personales no patológicos</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="apnppaciente" name="apnppaciente" [(ngModel)]="selectedPaciente().apnppaciente" #apnppaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="apppaciente" class="block text-gray-500 text-sm font-blod mb-2">Antecedentes persona patológica</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="apppaciente" name="apppaciente" [(ngModel)]="selectedPaciente().apppaciente" #apppaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="agopaciente" class="block text-gray-500 text-sm font-blod mb-2">Antecedentes gineco obstetricos</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="agopaciente" name="agopaciente" [(ngModel)]="selectedPaciente().agopaciente" #agopaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="cardiacopaciente" class="block text-gray-500 text-sm font-blod mb-2">Cardiaco</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="cardiacopaciente" name="cardiacopaciente" [(ngModel)]="selectedPaciente().cardiacopaciente" #cardiacopaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="respiratoriopaciente" class="block text-gray-500 text-sm font-blod mb-2">Respiratorio</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="respiratoriopaciente" name="respiratoriopaciente" [(ngModel)]="selectedPaciente().respiratoriopaciente" #respiratoriopaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="digestivopaciente" class="block text-gray-500 text-sm font-blod mb-2">Digestivo</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="digestivopaciente" name="digestivopaciente" [(ngModel)]="selectedPaciente().digestivopaciente" #digestivopaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="pielytegumentospaciente" class="block text-gray-500 text-sm font-blod mb-2">Piel y tegumentos</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="pielytegumentospaciente" name="pielytegumentospaciente" [(ngModel)]="selectedPaciente().pielytegumentospaciente" #pielytegumentospaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="hemotipopaciente" class="block text-gray-500 text-sm font-blod mb-2">Hemotipo</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="hemotipopaciente" name="hemotipopaciente" [(ngModel)]="selectedPaciente().hemotipopaciente" #hemotipopaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="terapeuticapaciente" class="block text-gray-500 text-sm font-blod mb-2">Terapeutica empleada</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="terapeuticapaciente" name="terapeuticapaciente" [(ngModel)]="selectedPaciente().terapeuticapaciente" #terapeuticapaciente="ngModel"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="pronosticopaciente" class="block text-gray-500 text-sm font-blod mb-2">Pronóstico del paciente</label>
+        <textarea type="text" rows="4" class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline" id="pronosticopaciente" name="pronosticopaciente" [(ngModel)]="selectedPaciente().pronosticopaciente" #pronosticopaciente="ngModel"></textarea>
+      </div>
+
       <div class="flex justify-end">
         <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" (click)="onCloseModal()">Cancelar</button>
         <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded-md" >Guardar</button>
-
       </div>
+    </div>
     </form>
 
     <div *ngIf="showConfirmationModal()" class="fixed inset-0 flex items-center justify-center p-4">
@@ -106,34 +145,85 @@
   </div>
  </div>
 
- <!--Modal-->
- <div *ngIf="showVerModal()" class="fixed inset-0 flex items-center justify-center p-4">
-  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
-    <h2 class="text-xl font-bold mb-4">Editar paciente</h2>
-    <form action="" >
-      <div class="mb-4">
-        <label for="nompaciente" class="block text-white text-sm font-blod mb-2">Nombre</label>
-        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().nompaciente }}</p>
-      </div>
-      <div class="mb-4">
-        <label for="edadpaciente" class="block text-white-700 text-sm font-blod mb-2">Edad</label>
-        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().edadpaciente }}</p>
-      </div>
-      <div class="mb-4">
-        <label for="telpaciente" class="block text-white-700 text-sm font-blod mb-2">Teléfono</label>
-        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().telpaciente }}</p>
-      </div>
-      <div class="mb-4">
-        <label for="dirpaciente" class="block text-white-700 text-sm font-blod mb-2">Dirección</label>
-        <p class="text-[var(--text-color-blue-blanco)]"> {{ selectedPaciente().dirpaciente }}</p>
+<!-- Modal -->
+<div *ngIf="showVerModal()" class="fixed inset-0 flex items-center justify-center p-4 overflow-auto">
+  <div class="bg-gray-900 rounded-lg shadow-lg w-full max-w-2xl p-6">
+    <h2 class="text-xl font-bold mb-4">Diagnóstico de {{ selectedPaciente().nompaciente }}</h2>
+    <form action="">
+      <div class="max-h-[60vh] overflow-y-auto pr-2">
+        <div class="mb-4">
+          <label for="nompaciente" class="block text-white-700 text-sm font-bold mb-2">Nombre</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().nompaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="edadpaciente" class="block text-white-700 text-sm font-bold mb-2">Edad</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().edadpaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="telpaciente" class="block text-white-700 text-sm font-bold mb-2">Teléfono</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().telpaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="correopaciente" class="block text-white-700 text-sm font-bold mb-2">Correo</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().correopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="dirpaciente" class="block text-white-700 text-sm font-bold mb-2">Dirección</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().dirpaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="ahfpaciente" class="block text-white-700 text-sm font-bold mb-2">Antecedentes heredofamiliares</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().ahfpaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="apnppaciente" class="block text-white-700 text-sm font-bold mb-2">Antecedentes personales no patológicos</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().apnppaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="apppaciente" class="block text-white-700 text-sm font-bold mb-2">Antecedentes persona patológica</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().apppaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="agopaciente" class="block text-white-700 text-sm font-bold mb-2">Antecedentes gineco obstetricos</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().agopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="cardiacopaciente" class="block text-white-700 text-sm font-bold mb-2">Cardiaco</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().cardiacopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="cardiacopaciente" class="block text-white-700 text-sm font-bold mb-2">Respiratorio</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().respiratoriopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="cardiacopaciente" class="block text-white-700 text-sm font-bold mb-2">Digestivo</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().digestivopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="cardiacopaciente" class="block text-white-700 text-sm font-bold mb-2">Piel y tegumentos</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().pielytegumentospaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="hemotipopaciente" class="block text-white-700 text-sm font-bold mb-2">Hemotipo</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().hemotipopaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="terapeuticapaciente" class="block text-white-700 text-sm font-bold mb-2">Terapeutica empleada</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().terapeuticapaciente }}</p>
+        </div>
+        <div class="mb-4">
+          <label for="pronosticopaciente" class="block text-white-700 text-sm font-bold mb-2">Pronóstico del paciente</label>
+          <p class="text-[var(--text-color-blue-blanco)]">{{ selectedPaciente().pronosticopaciente }}</p>
+        </div>
       </div>
       <div class="flex justify-end">
-        <button type="submit" class="bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md mr-2" (click)="onCloseVerModal()">Cancelar</button>
-
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md mr-2"
+          (click)="onCloseVerModal()">Cancelar</button>
       </div>
     </form>
   </div>
- </div>
+</div>
+
 
 
  <div *ngIf="showDelete()" class="fixed inset-0 flex items-center justify-center p-4">

@@ -1,0 +1,75 @@
+<div class="flex min-h-screen bg-gray-600">
+  <div class="flex flex-col justify-center items-center w-full md:w-1/2 mx-auto px-4">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-10">
+      <div class="flex items-center justify-center mb-2">
+        <img src="../../../assets/logo-developers-sharks.png" alt="Avatar" class="w-24 h-24 rounded-full">
+      </div>
+      <article>
+        <h1 class="text-3xl mb-2">Dr. Alejandro</h1>
+      </article>
+      <h2 class="text-2xl font-bold text-[var(--text-color-blue-blanco)] text-center mb-4">Iniciar sesión</h2>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="formValid" >
+        <div class="mb-4">
+          <label for="email" class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2">
+            Correo electrónico
+          </label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="w-full px-3 py-2 rounded-md border text-[var(--text-color-blue-blanco)] border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+            placeholder="Ingrese su correo electrónico"
+            required="true"
+          />
+          <div *ngIf="formValid.controls.email.errors && formValid.controls.email.touched">
+            <div *ngIf="formValid.controls.email.errors?.['required']" class="text-red-500 text-sm mt-2">El correo es requerido</div>
+         </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="w-full px-3 py-2 rounded-md border text-[var(--text-color-blue-blanco)] border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+            placeholder="Ingrese su contraseña"
+            [class.border-red-500]="formValid.get('password')?.invalid && formValid.get('password')?.touched"
+            required
+          />
+          <div *ngIf="formValid.controls.password.errors && formValid.controls.password.touched">
+            <div *ngIf="formValid.controls.password.errors?.['required']" class="text-red-500 text-sm mt-2">La contraseña es requerida</div>
+         </div>
+
+        </div>
+
+        <div class="flex items-center mb-6">
+          <input
+            type="checkbox"
+            id="rememberMe"
+            class="mr-2 w-4 h-4 text-[var(--text-color-blue-blanco)] bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
+          />
+          <label for="rememberMe" class="ml-2 block text-sm text-[var(--text-color-blue-blanco)]">
+            Recordarme
+          </label>
+          <a href="#" class="ml-auto text-[var(--text-color-blue-blanco)] hover:text-purple-400">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <div>
+          <button
+      class="w-full px-4 py-2 bg-purple-700 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      type="submit"
+    >
+      Iniciar sesión
+    </button>
+        </div>
+      </form>
+
+      <div class="mt-6 text-center">
+        <span class="text-sm text-[var(--text-color-blue-blanco)] hover:bg-purple-100 cursor-pointer">¿Aún no tienes cuenta?</span> </div>
+    </div>
+  </div>
+</div>

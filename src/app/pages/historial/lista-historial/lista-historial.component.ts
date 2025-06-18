@@ -1,20 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { PacienteService } from '../../../services/paciente.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
-
-interface Item {
-  idhistorial: string,
-  pesohistorial: string,
-  tallahistorial: string,
-  fchistorial: string,
-  citahistorial: string,
-  idpaciente: string,
-  nompaciente: string
-  fechahistorial: string,
-  diagnostico: string,
-}
 
 @Component({
   selector: 'app-lista-historial',
@@ -26,73 +14,81 @@ export class ListaHistorialComponent {
 pacientesService = inject(PacienteService);
   toast = inject(HotToastService);
 
-  historial = this.pacientesService.historial;
+  private _allHistorial = this.pacientesService.historial;
+  historial = signal<any[]>([]);
   pacientes = this.pacientesService.pacientes;
 
-  sortBy = signal<keyof Item>('nompaciente');
+  sortBy = signal<keyof any>('nompaciente');
   sortOrder = signal<'asc' | 'desc'>('asc');
+  showModalboolean: boolean = false;
+  showConfirmation: boolean = false;
 
   showModal = signal(false);
   showVerModal = signal(false);
   showConfirmationModal = signal(false);
   showDelete = signal(false);
   idHistorialToDelete = signal<number>(0)
+  filteredPacientes: any[] = [];
+  selectedPatientId: number | null = null; // To store the selected patient's ID
+  listPacientes: any[] = [];
+  date = new Date();
 
-  selectedHistorial = signal<Item>({
-    idhistorial: '',
-    pesohistorial: '',
-    tallahistorial: '',
-    fchistorial: '',
-    citahistorial: '',
-    idpaciente: '',
-    nompaciente: '',
-    fechahistorial: '',
-    diagnostico: '',
-  });
-
-  constructor() {
-    console.log(this.historial());
-  }
+  dataForm = signal(
+    new FormGroup({
+      idhistorial: new FormControl(''),
+      nompaciente: new FormControl('', Validators.required),
+      pesohistorial: new FormControl('', [Validators.required]),
+      tallahistorial: new FormControl(''),
+      fchistorial: new FormControl(''),
+      citahistorial: new FormControl('', [Validators.required]),
+      frhistorial: new FormControl(''),
+      tahistorial: new FormControl(''),
+      spohistorial: new FormControl(''),
+      alergiashistorial: new FormControl(''),
+      idpaciente: new FormControl(null, [Validators.required]),
+      fechahistorial: new FormControl(this.date.toLocaleDateString()),
+      diagnostico: new FormControl('', [Validators.required]),
+    })
+  );
 
   isLoading = this.pacientesService.isLoadingHistorial
+  searchText: string = '';
+  constructor() {
+    this.dataForm = signal(
+    new FormGroup({
+      idhistorial: new FormControl(''),
+      nompaciente: new FormControl(''),
+      pesohistorial: new FormControl('', [Validators.required]),
+      tallahistorial: new FormControl(''),
+      fchistorial: new FormControl(''),
+      citahistorial: new FormControl('', [Validators.required]),
+      frhistorial: new FormControl(''),
+      tahistorial: new FormControl(''),
+      spohistorial: new FormControl(''),
+      alergiashistorial: new FormControl(''),
+      idpaciente: new FormControl(null, [Validators.required]),
+      fechahistorial: new FormControl(this.date.toLocaleDateString()),
+      diagnostico: new FormControl('', [Validators.required]),
+    })
+  );
+    effect(() => {
+      this.historial.set(this._allHistorial());
 
-  sortedHistorial = computed(() => {
-    const currentSortBy = this.sortBy();
-    const currentSortOrder = this.sortOrder();
-
-    return [...this.historial()].sort((a, b) => {
-      const valueA = a[currentSortBy];
-      const valueB = b[currentSortBy];
-
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return currentSortOrder === 'asc'
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      } else if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return currentSortOrder === 'asc' ? valueA - valueB : valueB - valueA;
-      } else {
-        return 0;
-      }
     });
-  });
-
-  setSortBy(column: keyof Item) {
-    if (this.sortBy() === column) {
-      this.sortOrder.update((order) => (order === 'asc' ? 'desc' : 'asc'));
-    } else {
-      this.sortBy.set(column);
-      this.sortOrder.set('asc');
-    }
   }
 
-  onEditHistorial(item: Item) {
+
+
+  onEditHistorial(item: any) {
     this.showModal.set(true);
-    this.selectedHistorial.set(item);
+    this.dataForm().patchValue(item);
+    // this.selectedHistorial.set(item);
   }
 
-  onVerHistorial(item: Item) {
+  onVerHistorial(item: any) {
     this.showVerModal.set(true);
-    this.selectedHistorial.set(item);
+    this.dataForm().patchValue(item);
+    // this.selectedHistorial.set(item);
   }
 
   onCloseModal() {
@@ -103,28 +99,27 @@ pacientesService = inject(PacienteService);
     this.showVerModal.set(false);
   }
 
-  onSubmit(editForm: NgForm) {
-    if (editForm.invalid) {
+  onSubmit() {
+    if (this.dataForm().invalid) {
       this.toast.warning('Por favor, complete todos los campos', {dismissible: true});
-      editForm.form.markAllAsTouched();
+      this.dataForm().markAllAsTouched();
       return;
     }
-    console.log(editForm.value)
-    return
     this.showConfirmationModal.set(true);
   }
 
   confirmEditHistorial() {
     this.showConfirmationModal.set(false);
-    this.pacientesService.editarHistorial(this.selectedHistorial()).subscribe({
+    this.pacientesService.editarHistorial(this.dataForm().value).subscribe({
       next: (response: any) => {
         if (response['resultado'] == 'OK') {
           this.toast.success('Historial actualizado con éxito', {
             dismissible: true,
           });
           this.showModal.set(false);
-          this.pacientesService.refetchHistorial
+          this.pacientesService.refetchHistorial()
         }
+
       },
       error: (error) => {
         this.toast.error('No se pudo actualizar el paciente', {
@@ -140,14 +135,14 @@ pacientesService = inject(PacienteService);
     this.showConfirmationModal.set(false);
    }
 
-   showDeleteModal(idpaciente: number) {
+   showDeleteModal(idhistorial: any) {
     this.showDelete.set(true);
-    this.idHistorialToDelete.set(idpaciente)
+    this.idHistorialToDelete.set(idhistorial)
   }
 
   confirmDeleteHistorial() {
     this.showDelete.set(false);
-    this.pacientesService.eliminarPaciente( this.idHistorialToDelete() )
+    this.pacientesService.eliminarHistorial( this.idHistorialToDelete() )
     .subscribe({
       next: (response: any) => {
         this.toast.success('Historial eliminado con éxito', {
@@ -156,13 +151,13 @@ pacientesService = inject(PacienteService);
         this.pacientesService.refetchHistorial();
       },
       error: (error) => {
-        this.toast.error('No se pudo eliminar el paciente', {
+        this.toast.error('No se pudo eliminar el historial', {
           dismissible: true,
         });
         console.log(error);
       },
       complete: () => {
-        console.log('Paciente eliminado');
+        console.log('Historial eliminado');
       }
     })
   }
@@ -175,4 +170,90 @@ pacientesService = inject(PacienteService);
   cancelDeleteHistorial() {
     this.showDelete.set(false);
   }
+
+  seleccionarReceta(idhistorial: any) {
+    this.pacientesService.seleccionarReceta(idhistorial)
+  }
+
+  filteredHistorialList() {
+    if (!this.searchText) {
+      return this.historial();
+    }
+    const search = this.searchText
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+      return this.historial().filter((item) => {
+
+        const nompaciente = item.nompaciente
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+          return nompaciente.includes(search);
+      });
+  }
+
+
+
+  resetHistorial(){
+    this.searchText = '';
+  }
+
+  openModal() {
+    this.showModalboolean = true;
+  }
+
+  closeModal() {
+    this.showModalboolean = false;
+  }
+
+  selectPatient(item: any) {
+    this.selectedPatientId = item.idpaciente; // Store the patient ID
+    this.dataForm().patchValue({
+      idpaciente: item.idpaciente,
+      nompaciente: item.nompaciente, // Update the nompaciente form control
+
+    });
+    const inputElement = document.getElementById('idpaciente') as HTMLInputElement;
+    if(inputElement){
+      inputElement.value = item.nompaciente;
+    }
+    this.closeModal(); // Close the modal after selection
+  }
+
+  filteredPacientesList() {
+    if (!this.searchText) {
+      return this.pacientes();
+    }
+    const search = this.searchText
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+      return this.pacientes().filter((item: any) => {
+
+        const nompaciente = item.nompaciente
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+          return nompaciente.includes(search);
+      });
+  }
+
+  filterPacientes(){
+    if (!this.searchText) {
+      this.filteredPacientes = [...this.listPacientes];
+      return;
+    }
+    this.filteredPacientes = this.listPacientes.filter(paciente=> paciente.nompaciente.toLowerCase().includes(this.searchText.toLowerCase()));
+  }
+
+  resetPacientes(){
+    this.searchText = '';
+  }
+
+
 }

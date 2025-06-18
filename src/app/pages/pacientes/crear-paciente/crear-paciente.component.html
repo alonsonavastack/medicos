@@ -1,77 +1,297 @@
 <div class="bg-gray-600 rounded-md shadow-md p-4 mb-4">
-  <h2 class="text-xl font-bold">Crear paciente</h2>
+  <h2 class="text-xl font-bold">Crear paciente con historial</h2>
 </div>
 
 <form class="space-y-4 mb-4" [formGroup]="dataForm()" (ngSubmit)="onSubmit()">
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div>
       <label
-        for="nombre"
+        for="nompaciente"
         class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
         >Nombre</label
       >
       <input
         type="text"
-        id="nombre"
+        id="nompaciente"
         class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
         placeholder="Ingrese su nombre"
         formControlName="nompaciente"
         name="nompaciente"
       />
-      <div *ngIf="dataForm().controls.nompaciente.touched && dataForm().controls.nompaciente.errors?.['required']"  class="text-red-500 text-sm mt-2">El nombre es requerido</div>
+      <div
+        *ngIf="dataForm().controls.nompaciente.touched && dataForm().controls.nompaciente.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        El nombre es requerido
+      </div>
     </div>
     <div>
       <label
-        for="edad"
+        for="edadpaciente"
         class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
         >Edad</label
       >
       <input
-        type="number"
-        id="edad"
+        type="text"
+        id="edadpaciente"
         class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
         placeholder="Ingrese su edad"
         formControlName="edadpaciente"
         name="edadpaciente"
       />
-      <div *ngIf="dataForm().controls.edadpaciente.touched && dataForm().controls.edadpaciente.errors?.['required']"  class="text-red-500 text-sm mt-2">La edad es requerida</div>
+      <div
+        *ngIf="dataForm().controls.edadpaciente.touched && dataForm().controls.edadpaciente.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        La edad es requerida
+      </div>
     </div>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div>
       <label
-        for="telefono"
+        for="telpaciente"
         class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
         >Teléfono</label
       >
       <input
         type="tel"
-        id="telefono"
+        id="telpaciente"
         class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
         placeholder="Ingrese su teléfono"
         formControlName="telpaciente"
         name="telpaciente"
       />
-      <div *ngIf="dataForm().controls.telpaciente.touched && dataForm().controls.telpaciente.errors?.['required']"  class="text-red-500 text-sm mt-2">El teléfono es requerido</div>
     </div>
     <div>
       <label
-        for="direccion"
+        for="dirpaciente"
         class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
         >Dirección</label
       >
       <input
-        id="direccion"
+        id="dirpaciente"
         type="text"
         class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
         placeholder="Ingrese su dirección"
         formControlName="dirpaciente"
         name="dirpaciente"
       />
-      <div *ngIf="dataForm().controls.dirpaciente.touched && dataForm().controls.dirpaciente.errors?.['required']"  class="text-red-500 text-sm mt-2">La dirección es requerida</div>
+      <div
+        *ngIf="dataForm().controls.dirpaciente.touched && dataForm().controls.dirpaciente.errors?.['required']"
+        class="text-red-500 text-sm mt-2"
+      >
+        La dirección es requerida
+      </div>
     </div>
   </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="correopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Correo</label
+      >
+
+      <input
+        type="email"
+        id="correopaciente"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        placeholder="Ingrese el correo"
+        formControlName="correopaciente"
+        name="correopaciente"
+      />
+      <div
+        *ngIf="dataForm().controls.correopaciente.touched && dataForm().controls.correopaciente.errors?.['email']"
+        class="text-red-500 text-sm mt-2"
+      >
+        El correo electrónico debe ser escrito correctamente
+      </div>
+    </div>
+  </div>
+  <div class="w-full gap-4"><hr></div>
+  <div class="w-full gap-4">
+    <div>
+      <label
+        for="ahfpaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Antecedentes heredofamiliares</label
+      >
+      <textarea
+        id="ahfpaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Ingrese Ahf"
+        formControlName="ahfpaciente"
+        name="ahfpaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="apnppaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Antecedentes personales no patológicos</label
+      >
+      <textarea
+        id="apnppaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Ingrese Apnp"
+        formControlName="apnppaciente"
+        name="apnppaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="apppaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Antecedentes persona patológica</label
+      >
+      <textarea
+        id="apppaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Ingrese App"
+        formControlName="apppaciente"
+        name="apppaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="agopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Antecedentes gineco obstetricos</label
+      >
+      <textarea
+        id="agopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Ingrese ago"
+        formControlName="agopaciente"
+        name="agopaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="cardiacopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Cardiaco</label
+      >
+      <textarea
+        id="cardiacopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Cardiaco"
+        formControlName="cardiacopaciente"
+        name="cardiacopaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="respiratoriopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Respiratorio</label
+      >
+      <textarea
+        id="respiratoriopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Respiratorio"
+        formControlName="respiratoriopaciente"
+        name="respiratoriopaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="digestivopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Digestivo</label
+      >
+      <textarea
+        id="digestivopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Digestivo"
+        formControlName="digestivopaciente"
+        name="digestivopaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="pielytegumentospaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Piel y tegumentos</label
+      >
+      <textarea
+        id="pielytegumentospaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Piel y tegumentos"
+        formControlName="pielytegumentospaciente"
+        name="pielytegumentospaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="hemotipopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Hemotipo</label
+      >
+      <textarea
+        id="hemotipopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Ingrese hemotipo"
+        formControlName="hemotipopaciente"
+        name="hemotipopaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="terapeuticapaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Terapeutica empleada</label
+      >
+      <textarea
+        id="terapeuticapaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Terapeutica empleada"
+        formControlName="terapeuticapaciente"
+        name="terapeuticapaciente"
+      > </textarea>
+    </div>
+    <div>
+      <label
+        for="pronosticopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Pronóstico del paciente</label
+      >
+      <textarea
+        id="pronosticopaciente"
+        type="text"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        rows="4"
+        placeholder="Pronóstico del paciente"
+        formControlName="pronosticopaciente"
+        name="pronosticopaciente"
+      > </textarea>
+    </div>
+
+  </div>
+
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
   <button
@@ -82,20 +302,25 @@
   </button>
 </form>
 
-<div *ngIf="showConfirmationModal()" class="fixed inset-0 flex items-center justify-center p-4">
+<div
+  *ngIf="showConfirmationModal()"
+  class="fixed inset-0 flex items-center justify-center p-4"
+>
   <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
     <h2 class="text-xl font-bold mb-4">Estás seguro de crear este paciente?</h2>
-    <div class=" flex justify-end space-x-4">
-      <button class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
-       (click)="cancelCreatePaciente()"
+    <div class="flex justify-end space-x-4">
+      <button
+        class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+        (click)="cancelCreatePaciente()"
       >
         Cancelar
       </button>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
-       (click)="confirmCreatePaciente()"
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+        (click)="confirmCreatePaciente()"
       >
         Aceptar
       </button>
     </div>
   </div>
- </div>
+</div>

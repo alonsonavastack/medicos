@@ -1,0 +1,25 @@
+<!-- src/app/components/license-generator/license-generator.component.html -->
+<div class="container mx-auto p-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">License Generator</h1>
+
+  <button
+    (click)="generateLicense()"
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    [disabled]="isLoading"
+  >
+    <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
+    Generate License
+  </button>
+
+  <div *ngIf="licenseKey" class="mt-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-2">Generated License:</h2>
+    <div class="bg-gray-100 p-4 rounded-md flex items-center">
+      <code class="text-gray-800 flex-grow">{{ licenseKey }}</code>
+      <button (click)="copyToClipboard()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded ml-4">
+          <i class="fa fa-copy"></i> Copy
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="mt-4 text-red-500">{{ errorMessage }}</div>
+</div>
