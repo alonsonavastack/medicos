@@ -1,5 +1,6 @@
 export const environment = {
-  url: 'http://localhost/gineco/api/',
+  url: 'http://localhost/odonto/api/',
+  // url: 'http://192.168.0.26/gineco/api/',
   production: true
 };
 

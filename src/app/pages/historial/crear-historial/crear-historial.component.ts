@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import '@angular/compiler';
 import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
@@ -29,6 +30,7 @@ export class CrearHistorialComponent {
   searchText: string = '';
   filteredPacientes: any[] = [];
   selectedPatientId: number | null = null; // To store the selected patient's ID
+  recipeImagePreview = signal<string | ArrayBuffer | null>(null); // Signal for image preview
 
   dataForm = signal(
     new FormGroup({
@@ -43,11 +45,30 @@ export class CrearHistorialComponent {
       idpaciente: new FormControl(null, [Validators.required]),
       fechahistorial: new FormControl(this.date.toLocaleDateString()),
       diagnostico: new FormControl('', [Validators.required]),
+      recipeImage: new FormControl<File | null>(null)
     })
   );
 
+ onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.dataForm().patchValue({ recipeImage: file });
+      this.dataForm().get('recipeImage')?.updateValueAndValidity();
+
+      // Generate preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.recipeImagePreview.set(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.recipeImagePreview.set(null); // Clear preview if no file is selected
+    }
+  }
+
   onSubmit() {
     if (this.dataForm().invalid) {
+      this.toast.warning('Por favor, complete todos los campos obligatorios.', { dismissible: true });
       this.dataForm().markAllAsTouched();
       return;
     }
@@ -56,23 +77,44 @@ export class CrearHistorialComponent {
 
   confirmCreateHistorial() {
     this.showConfirmationModal.set(false);
-    if (this.dataForm().valid == true) {
-      this.pacienteService.altaHistorial(this.dataForm().value).subscribe({
-        next: (resp) => {
-          this.toast.success('Historial creado correctamente');
-          this.pacienteService.updateHistorial();
-        },
-        error: (err) => {
-          this.toast.error('No se pudo registrar, algo salió mal', {
-            dismissible: true,
-          });
-        },
-        complete: () => {
-          this.dataForm().reset();
-        }
-      });
+    if (this.dataForm().valid) {
+        const formData = new FormData();
+        
+        Object.keys(this.dataForm().controls).forEach(key => {
+            const control = this.dataForm().get(key);
+            if (control && control.value !== null && control.value !== undefined) {
+                if (key === 'recipeImage' && control.value instanceof File) {
+                    formData.append(key, control.value, control.value.name);
+                } else {
+                    formData.append(key, control.value);
+                }
+            }
+        });
+
+        this.pacienteService.altaHistorial(formData).subscribe({
+            next: (resp: any) => {
+                if (resp.body?.resultado === 'OK') {
+                    this.toast.success('Historial creado correctamente');
+                    this.pacienteService.updateHistorial();
+                    this.resetForm();
+                } else {
+                    this.toast.error(resp.body?.mensaje || 'Error desconocido al crear historial');
+                }
+            },
+            error: (err) => {
+                console.error('Error completo:', err);
+                this.toast.error(`Error al registrar: ${err.message || 'Error de conexión'}`);
+            }
+        });
     }
-  }
+}
+
+resetForm() {
+    this.dataForm().reset();
+    this.recipeImagePreview.set(null);
+    const inputElement = document.getElementById('idpaciente') as HTMLInputElement;
+    if (inputElement) inputElement.value = '';
+}
 
   cancelCreateHistorial() {
     this.showConfirmationModal.set(false);
@@ -131,5 +173,5 @@ export class CrearHistorialComponent {
     this.searchText = '';
   }
 
-  
+
 }

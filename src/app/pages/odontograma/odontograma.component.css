@@ -1,0 +1,20 @@
+.tooth {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.tooth:hover {
+  transform: scale(1.05);
+}
+
+.tooth-surface {
+  border: 1px solid #e2e8f0;
+}
+
+.treatment-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1px;
+}

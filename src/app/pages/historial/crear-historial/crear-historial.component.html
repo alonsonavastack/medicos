@@ -209,13 +209,47 @@
       class="text-red-500 text-sm mt-2">El diagnóstico es requerido</div>
     </div>
   </div>
+  
+  <!-- Input para la imagen de la receta -->
+    <div>
+      <label for="recipeImage" class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2">Imagen de la Receta (Opcional)</label>
+      <input
+        type="file"
+        id="recipeImage"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        class="mt-1 block w-full text-sm text-gray-500
+               file:mr-4 file:py-2 file:px-4
+               file:rounded-md file:border-0
+               file:text-sm file:font-semibold
+               file:bg-blue-50 file:text-blue-700
+               hover:file:bg-blue-100"
+      />
+    </div>
 
-  <button
-    type="submit"
-    class="bg-purple-600 hover:bg-purple-700 transition-all duration-200 rounded-md px-4 py-2 text-white font-semibold"
-  >
-    Crear receta
-  </button>
+    <!-- Vista previa de la imagen -->
+    @if (recipeImagePreview()) {
+      <div class="mt-4">
+        <h4 class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2">Vista Previa de la Imagen:</h4>
+        <img [src]="recipeImagePreview()" alt="Vista previa de la receta" class="max-w-xs max-h-64 border rounded-md shadow-sm" />
+      </div>
+    }
+  
+  <div class="flex justify-end space-x-4 pt-4">
+      <button
+        type="button"
+        (click)="dataForm().reset(); recipeImagePreview.set(null);"
+        class="px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-[var(--text-color-blue-blanco)]  hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+      >
+        Limpiar
+      </button>
+      <button
+        type="submit"
+        class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Crear receta
+      </button>
+    </div>
 </form>
 
 <div

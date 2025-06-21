@@ -18,12 +18,11 @@
         formControlName="nompaciente"
         name="nompaciente"
       />
-      <div
-        *ngIf="dataForm().controls.nompaciente.touched && dataForm().controls.nompaciente.errors?.['required']"
-        class="text-red-500 text-sm mt-2"
-      >
-        El nombre es requerido
-      </div>
+      @if (dataForm().get('nompaciente')?.touched && dataForm().get('nompaciente')?.hasError('required')) {
+        <div class="text-red-500 text-sm mt-2">
+          El nombre es requerido
+        </div>
+      }
     </div>
     <div>
       <label
@@ -39,12 +38,11 @@
         formControlName="edadpaciente"
         name="edadpaciente"
       />
-      <div
-        *ngIf="dataForm().controls.edadpaciente.touched && dataForm().controls.edadpaciente.errors?.['required']"
-        class="text-red-500 text-sm mt-2"
-      >
-        La edad es requerida
-      </div>
+      @if (dataForm().get('edadpaciente')?.touched && dataForm().get('edadpaciente')?.hasError('required')) {
+        <div class="text-red-500 text-sm mt-2">
+          La edad es requerida
+        </div>
+      }
     </div>
   </div>
 
@@ -78,12 +76,11 @@
         formControlName="dirpaciente"
         name="dirpaciente"
       />
-      <div
-        *ngIf="dataForm().controls.dirpaciente.touched && dataForm().controls.dirpaciente.errors?.['required']"
-        class="text-red-500 text-sm mt-2"
-      >
-        La dirección es requerida
-      </div>
+      @if (dataForm().get('dirpaciente')?.touched && dataForm().get('dirpaciente')?.hasError('required')) {
+        <div class="text-red-500 text-sm mt-2">
+          La dirección es requerida
+        </div>
+      }
     </div>
   </div>
 
@@ -103,12 +100,28 @@
         formControlName="correopaciente"
         name="correopaciente"
       />
-      <div
-        *ngIf="dataForm().controls.correopaciente.touched && dataForm().controls.correopaciente.errors?.['email']"
-        class="text-red-500 text-sm mt-2"
+    </div>
+    <div>
+      <label
+        for="generopaciente"
+        class="block text-[var(--text-color-blue-blanco)] text-lg font-bold mb-2"
+        >Género</label
       >
-        El correo electrónico debe ser escrito correctamente
-      </div>
+      <select
+        id="generopaciente"
+        class="shadow border-gray-600 appearance-none border rounded w-full py-2 px-3 text-[var(--text-color-blue-blanco)] leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline"
+        formControlName="generopaciente"
+        name="generopaciente"
+      >
+        <option value="">Seleccione un género</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+      @if (dataForm().get('correopaciente')?.touched && dataForm().get('correopaciente')?.hasError('email')) {
+        <div class="text-red-500 text-sm mt-2">
+          El correo electrónico debe ser escrito correctamente
+        </div>
+      }
     </div>
   </div>
   <div class="w-full gap-4"><hr></div>
@@ -290,6 +303,15 @@
       > </textarea>
     </div>
 
+   <div class="mt-6">
+  <h3 class="text-xl font-bold mb-4">Odontograma</h3>
+  <app-odontograma
+    formControlName="odontograma"
+    (toothStateChange)="onOdontogramaChange($event)"
+    class="w-full">
+  </app-odontograma>
+</div>
+
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
@@ -302,25 +324,24 @@
   </button>
 </form>
 
-<div
-  *ngIf="showConfirmationModal()"
-  class="fixed inset-0 flex items-center justify-center p-4"
->
-  <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
-    <h2 class="text-xl font-bold mb-4">Estás seguro de crear este paciente?</h2>
-    <div class="flex justify-end space-x-4">
-      <button
-        class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
-        (click)="cancelCreatePaciente()"
-      >
-        Cancelar
-      </button>
-      <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
-        (click)="confirmCreatePaciente()"
-      >
-        Aceptar
-      </button>
+@if (showConfirmationModal()) {
+  <div class="fixed inset-0 flex items-center justify-center p-4">
+    <div class="bg-gray-700 rounded-lg shadow-lg w-full max-w-md p-6">
+      <h2 class="text-xl font-bold mb-4">Estás seguro de crear este paciente?</h2>
+      <div class="flex justify-end space-x-4">
+        <button
+          class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+          (click)="cancelCreatePaciente()"
+        >
+          Cancelar
+        </button>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounden focus:outline-none focus:shadow-outline"
+          (click)="confirmCreatePaciente()"
+        >
+          Aceptar
+        </button>
+      </div>
     </div>
   </div>
-</div>
+}

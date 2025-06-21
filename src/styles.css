@@ -1,47 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --text-color-blue-blanco: #ffffff;
+  --text-color-blue-blanco: #f8f9fa;
 }
 
 /* Dark mode variables */
 .dark-mode {
-  /* Even though named "dark-mode", these will be your LIGHT theme settings */
-  --bg-color: #2563eb; /* White background */
-  --text-color-blue-blanco: #7c3aed; /* A nice, rich blue for primary text */
-  --purple-color: #6366f1; /* A slightly lighter blue/purple for accents (you can adjust this) */
+  --bg-color: #1a73e8; /* Professional blue background */
+  --text-color-blue-blanco: #4a5568; /* Neutral gray for better readability */
+  --purple-color: #5a67d8; /* Professional indigo for accents */
 
-  --color-gray-50: #f9fafb; /* Very light gray */
-  --color-gray-100: #f3f4f6; /* Light gray */
-  --color-gray-200: #e5e7eb; /* Slightly darker gray */
-  --color-gray-400: #d1d5db; /* Medium gray */
-  --color-gray-600: #9ca3af; /* Darker gray */
-  --color-gray-800: #f0f4fa; /* Almost black (use for strong contrast) */
+  --color-gray-50: #f7fafc;
+  --color-gray-100: #edf2f7;
+  --color-gray-200: #e2e8f0;
+  --color-gray-400: #cbd5e0;
+  --color-gray-600: #718096;
+  --color-gray-800: #efefef;
 
-  --color-purple-600: #a78bfa; /* Lighter purple (adjust as needed) */
-  --color-purple-700: #8b5cf6; /* Medium purple */
-  --color-purple-800: #7c3aed; /* Darker purple */
-  --color-purple-900: #6d28d9; /* Very dark purple */
-  --color-purple-950: #581c87; /* Deepest purple */
+  --color-purple-600: #6b46c1;
+  --color-purple-700: #553c9a;
+  --color-purple-800: #44337a;
+  --color-purple-900: #322659;
+  --color-purple-950: #1a1a2e;
 }
 
 @property --color-1 {
   syntax: "<color>";
   inherits: false;
-  initial-value: hsl(95 100% 62%);
+  initial-value: hsl(210 100% 50%);
 }
 
 @property --color-2 {
   syntax: "<color>";
   inherits: false;
-  initial-value: hsl(204 100% 59%);
+  initial-value: hsl(230 100% 50%);
 }
 
 @keyframes gradient-change {
   to {
-    --color-1: hsl(210 100% 59%);
-    --color-2: hsl(310 100% 59%);
-
+    --color-1: hsl(220 100% 50%);
+    --color-2: hsl(250 100% 50%);
   }
 }
 

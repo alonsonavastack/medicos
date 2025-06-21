@@ -1,0 +1,248 @@
+<div class="container mx-auto p-2 max-w-[90rem]">
+  <div class="bg-gray-600 rounded-lg p-6">
+    <div class="space-y-4">
+    <!-- Dientes Permanentes Superiores -->
+    <div class="space-y-4">
+      <!-- Título Cuadrante 1 y 2 -->
+      
+      <!-- Línea divisoria vertical -->
+      <div class="relative">
+        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300"></div>
+      <!-- Fila de dientes superiores (Cuadrante 1 y 2) -->
+      <div class="grid grid-cols-16 gap-3 w-full">
+        <div *ngFor="let toothId of allToothIds[0]" class="relative flex flex-col items-center">
+          <div class="text-center mb-2">
+            <img src="assets/teeth/{{toothId}}.png" alt="Diente {{toothId}}" class="w-10 h-14 mx-auto">
+          </div>
+          <div class="relative w-14 h-14 bg-gray-800 border border-gray-300 rounded cursor-pointer" (click)="selectTooth(toothId)">
+            <span class="absolute top-0 left-0 text-[10px] font-bold p-1 text-[var(--text-color-blue-blanco)]">{{ toothId }}</span>
+            <ng-container *ngIf="getToothById(toothId) as tooth">
+              <div *ngIf="tooth.treatment" class="absolute inset-0 flex items-center justify-center">
+                <span [class]="tooth.treatment.color + ' text-xl'">{{ tooth.treatment.symbol }}</span>
+              </div>
+              <div class="absolute inset-0">
+                <ng-container *ngIf="tooth.faces">
+                  <div *ngIf="tooth.faces['mesial']" class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-r bg-blue-500"></div>
+                  <div *ngIf="tooth.faces['distal']" class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-l bg-blue-500"></div>
+                  <div *ngIf="tooth.faces['vestibular']" class="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-b bg-blue-500"></div>
+                  <div *ngIf="tooth.faces['lingual']" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-t bg-blue-500"></div>
+                  <div *ngIf="tooth.faces['incisal']" class="absolute inset-1 bg-blue-300 rounded opacity-60"></div>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      </div>
+      <!-- Línea divisoria horizontal -->
+      <div class="border-t border-gray-300 my-4"></div>
+      <!-- Dientes Permanentes Inferiores -->
+      <div class="space-y-4">
+        <!-- Título Cuadrante 4 y 3 -->
+       
+        <!-- Línea divisoria vertical -->
+        <div class="relative">
+          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300"></div>
+        <!-- Fila de dientes inferiores (Cuadrante 4 y 3) -->
+        <div class="grid grid-cols-16 gap-3 w-full">
+          <div *ngFor="let toothId of allToothIds[3]" class="relative flex flex-col items-center">
+            <div class="text-center mb-2">
+              <img src="assets/teeth/{{toothId}}.png" alt="Diente {{toothId}}" class="w-10 h-14 mx-auto">
+            </div>
+            <div class="relative w-14 h-14 bg-gray-800 border border-gray-300 rounded cursor-pointer" (click)="selectTooth(toothId)">
+              <span class="absolute top-0 left-0 text-[10px] font-bold p-1 text-[var(--text-color-blue-blanco)]">{{ toothId }}</span>
+              <ng-container *ngIf="getToothById(toothId) as tooth">
+                <div *ngIf="tooth.treatment" class="absolute inset-0 flex items-center justify-center">
+                  <span [class]="tooth.treatment.color + ' text-xl'">{{ tooth.treatment.symbol }}</span>
+                </div>
+                <div class="absolute inset-0">
+                  <ng-container *ngIf="tooth.faces">
+                    <div *ngIf="tooth.faces['mesial']" class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-r bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['distal']" class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-l bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['vestibular']" class="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-b bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['lingual']" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-t bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['incisal']" class="absolute inset-1 bg-blue-300 rounded opacity-60"></div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    <!-- Dientes Temporales -->
+    <div class="mt-14">
+      <!-- Dientes Temporales Superiores -->
+      <div class="mb-2">
+        <div class="grid grid-cols-10 gap-3 w-full">
+          <div *ngFor="let toothId of ['55','54','53','52','51','61','62','63','64','65']" class="relative flex flex-col items-center">
+            <div class="text-center mb-2">
+              <img src="assets/teeth/{{toothId}}.png" alt="Diente {{toothId}}" class="w-8 h-12 mx-auto">
+            </div>
+            <div class="relative w-16 h-16 bg-gray-800 border border-gray-300 rounded cursor-pointer" (click)="selectTooth(toothId)">
+              <span class="absolute top-0 left-0 text-[10px] font-bold p-1 text-[var(--text-color-blue-blanco)]">{{ toothId }}</span>
+              <ng-container *ngIf="getToothById(toothId) as tooth">
+                <div *ngIf="tooth.treatment" class="absolute inset-0 flex items-center justify-center">
+                  <span [class]="tooth.treatment.color + ' text-2xl'">{{ tooth.treatment.symbol }}</span>
+                </div>
+                <div class="absolute inset-0">
+                  <ng-container *ngIf="tooth.faces">
+                    <div *ngIf="tooth.faces['mesial']" class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-r bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['distal']" class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-l bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['vestibular']" class="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-b bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['lingual']" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-t bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['incisal']" class="absolute inset-1 bg-blue-300 rounded opacity-60"></div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <div class="border-t border-gray-300 my-2"></div>
+
+      <!-- Dientes Temporales Inferiores -->
+      <div>
+        <div class="grid grid-cols-10 gap-1 w-full">
+          <div *ngFor="let toothId of ['85','84','83','82','81','71','72','73','74','75']" class="relative flex flex-col items-center">
+            <div class="text-center mb-2">
+              <img src="assets/teeth/{{toothId}}.png" alt="Diente {{toothId}}" class="w-8 h-12 mx-auto">
+            </div>
+            <div class="relative w-16 h-16 bg-gray-800 border border-gray-300 rounded cursor-pointer" (click)="selectTooth(toothId)">
+              <span class="absolute top-0 left-0 text-[10px] font-bold p-1 text-[var(--text-color-blue-blanco)]">{{ toothId }}</span>
+              <ng-container *ngIf="getToothById(toothId) as tooth">
+                <div *ngIf="tooth.treatment" class="absolute inset-0 flex items-center justify-center">
+                  <span [class]="tooth.treatment.color + ' text-2xl'">{{ tooth.treatment.symbol }}</span>
+                </div>
+                <div class="absolute inset-0">
+                  <ng-container *ngIf="tooth.faces">
+                    <div *ngIf="tooth.faces['mesial']" class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-r bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['distal']" class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-l bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['vestibular']" class="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-b bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['lingual']" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-t bg-blue-500"></div>
+                    <div *ngIf="tooth.faces['incisal']" class="absolute inset-1 bg-blue-300 rounded opacity-60"></div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de tratamiento -->
+    <div *ngIf="showTreatmentModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]" (click)="cancelTreatment()">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md space-y-4" (click)="$event.stopPropagation()">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-[var(--text-color-blue-blanco)]">Tratamiento en pieza {{ selectedToothId }}</h2>
+          <button class="text-gray-500 hover:text-gray-700" (click)="cancelTreatment()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-[var(--text-color-blue-blanco)]">Tratamiento</label>
+          <select class="w-full p-2 border rounded text-sm text-[var(--text-color-blue-blanco)] bg-gray-500" [(ngModel)]="selectedTreatmentType">
+            <option *ngFor="let treatment of treatmentOptions" [value]="treatment.code">
+              {{ treatment.symbol }} - {{ treatment.name }}
+            </option>
+          </select>
+
+          <div class="flex items-center space-x-4 mt-4">
+            <label class="flex items-center text-sm text-[var(--text-color-blue-blanco)]">
+              <input type="radio" value="existente" [(ngModel)]="selectedTreatmentStatus" class="mr-2"> Existente
+            </label>
+            <label class="flex items-center text-sm text-[var(--text-color-blue-blanco)]">
+              <input type="radio" value="requerida" [(ngModel)]="selectedTreatmentStatus" class="mr-2"> Requerida
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[var(--text-color-blue-blanco)] mb-1">Caras afectadas</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label *ngFor="let face of toothFaces" class="flex items-center text-sm text-[var(--text-color-blue-blanco)]">
+              <input type="checkbox" [(ngModel)]="selectedFaces[face]" class="mr-2"> {{ face }}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3">
+          <button class="px-4 py-2 text-sm bg-gray-300 text-[var(--text-color-blue-blanco)] rounded hover:bg-gray-400" (click)="cancelTreatment()">Cancelar</button>
+          <button class="px-4 py-2 text-sm bg-blue-600 text-[var(--text-color-blue-blanco)] rounded hover:bg-blue-700" (click)="applyTreatment(selectedToothId!, selectedTreatmentType, selectedTreatmentStatus!)">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Panel de leyenda del odontograma -->
+<div class="mt-6 p-4 bg-white rounded-lg shadow-md">
+  <h3 class="text-lg font-semibold mb-4 text-purple-800">Tratamiento de Conducto</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 rounded-full bg-blue-600"></div>
+      <span class="text-purple-800">Caries</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="text-blue-600 font-bold">X</span>
+      <span class="text-purple-800">Extracción</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="text-red-600 font-bold">X</span>
+      <span class="text-purple-800">Diente Ausente</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 rounded-full bg-red-600"></div>
+      <span class="text-purple-800">Obturación</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 rounded-full bg-red-600 border-2 border-blue-600"></div>
+      <span class="text-purple-800">Obturación en mal estado</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 rounded-full border-2 border-gray-600"></div>
+      <span class="text-purple-800">Corona</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 rounded-full border-2 border-red-600"></div>
+      <span class="text-purple-800">Corona en mal estado</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="font-bold text-gray-600">|</span>
+      <span class="text-purple-800">Incrustación</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="font-bold text-gray-600">⊓</span>
+      <span class="text-purple-800">Puente</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="font-bold text-gray-600">□</span>
+      <span class="text-purple-800">Prótesis Removible</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="font-bold text-gray-600">≈</span>
+      <span class="text-purple-800">Ortodoncia</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="font-bold text-gray-600">IM</span>
+      <span class="text-purple-800">Implante</span>
+    </div>
+  </div>
+</div>
+
+<!-- Botón para guardar el odontograma -->
+<div class="mt-6 flex justify-end">
+<button
+(click)="guardarOdontograma()"
+class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+>
+Guardar Odontograma
+</button>
+</div>
